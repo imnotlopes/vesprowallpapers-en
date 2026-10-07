@@ -99,6 +99,19 @@ a.bg-foreground.rounded-full{background-color:#f2ede3}
 
 @media (prefers-reduced-transparency:reduce){#oferta .rounded-3xl::after,[data-faq-item]::after,#upsell .max-w-lg::after,#sticky-bar > div::after,.liquid-glass::after{display:none}}
 
+/* Seletor de moeda (seção de preços) */
+.cur-picker{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:.5rem .6rem;margin:-1.25rem auto 2.25rem;font-size:.875rem;color:hsl(var(--muted-foreground))}
+.cur-picker[hidden]{display:none!important}
+.cur-picker select{appearance:none;-webkit-appearance:none;background:hsl(var(--background) / .6) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23d9b878' stroke-width='2.5' stroke-linecap='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right .7rem center/.8rem;color:hsl(var(--foreground));border:1px solid rgba(217,184,120,.45);border-radius:9999px;padding:.4rem 2rem .4rem .9rem;font-weight:600;cursor:pointer}
+.cur-picker select:focus-visible{outline:2px solid #d9b878;outline-offset:2px}
+.cur-picker option{background:#0b1118;color:#fff}
+.cur-note{flex-basis:100%;text-align:center;font-size:.75rem;color:hsl(var(--muted-foreground) / .85)}
+.cur-note a{text-decoration:underline}
+@media (min-width:768px){.cur-picker{margin:-2.25rem auto 3rem}}
+.cur-approx{font-weight:500;color:hsl(var(--muted-foreground))}
+.cur-approx.is-block{display:block;font-size:.875rem;line-height:1.25rem;letter-spacing:0;margin-top:.35rem}
+.cur-approx[hidden]{display:none!important}
+
 /* ===== PROTEÇÃO DAS IMAGENS ===== */
 img{-webkit-user-drag:none;user-drag:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;pointer-events:none}
 body{-webkit-touch-callout:none}
@@ -694,12 +707,18 @@ window.VESPRO_CONFIG = {
 <div class="relative z-10 max-w-5xl mx-auto px-6">
   <div class="reveal" style="transition-delay: 0.1s;"><h2 class="text-4xl md:text-6xl font-medium tracking-[-1px] text-center mb-4">Choose your <span class="font-serif italic font-normal">collection</span></h2></div>
   <div class="reveal" style="transition-delay: 0.15s;"><p class="text-muted-foreground text-lg text-center max-w-xl mx-auto mb-10 md:mb-14">It's a one-time payment.<br>No subscription, no monthly fees, no recurring charges.</p></div>
+  <!-- Seletor de moeda: aparece só quando as cotações carregam (detecta o país pelo IP via /api/geo) -->
+  <div id="currency-picker" class="cur-picker" hidden>
+    <label for="currency-select">Your currency</label>
+    <select id="currency-select" aria-label="Currency"></select>
+    <p id="currency-note" class="cur-note" hidden>Prices are in US dollars. Amounts marked ≈ are approximate conversions to <span data-cur-code></span>; the final amount is shown at checkout. Rates by <a href="https://www.exchangerate-api.com" target="_blank" rel="noopener">Exchange Rate API</a>.</p>
+  </div>
   <div class="reveal" style="transition-delay: 0.2s;"><div class="flex flex-col md:flex-row gap-6 md:items-stretch">
     <!-- Plano 1: Essencial (abre o pop-up de upsell) -->
     <div class="md:w-[38%] rounded-3xl ring-1 ring-foreground/15 bg-background/55 backdrop-blur-sm p-7 md:p-8 flex flex-col">
       <h3 class="font-semibold text-lg">Essential Collection</h3>
       <p class="text-sm text-muted-foreground mt-1">For when you just want the artwork. Simple as that.</p>
-      <p class="text-4xl font-medium tracking-[-1px] mt-5">$6.90</p>
+      <p class="text-4xl font-medium tracking-[-1px] mt-5">$6.90<span class="cur-approx is-block" data-approx="6.90" hidden></span></p>
       <p class="text-muted-foreground text-xs uppercase tracking-[2px] mt-1">ONE-TIME PAYMENT</p>
       <ul class="space-y-3 mt-7"><li class="flex items-start gap-3"><span class="mt-0.5 w-5 h-5 rounded-full bg-foreground/10 ring-1 ring-foreground/25 flex items-center justify-center shrink-0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="w-3 h-3" aria-hidden="true" style="color: hsl(var(--foreground));"><path d="M20 6 9 17l-5-5"></path></svg></span><span class="text-sm text-secondary-foreground leading-relaxed">Over 60 wallpapers</span></li><li class="flex items-start gap-3"><span class="mt-0.5 w-5 h-5 rounded-full bg-foreground/10 ring-1 ring-foreground/25 flex items-center justify-center shrink-0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="w-3 h-3" aria-hidden="true" style="color: hsl(var(--foreground));"><path d="M20 6 9 17l-5-5"></path></svg></span><span class="text-sm text-secondary-foreground leading-relaxed">4K laptop versions</span></li><li class="flex items-start gap-3"><span class="mt-0.5 w-5 h-5 rounded-full bg-foreground/10 ring-1 ring-foreground/25 flex items-center justify-center shrink-0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="w-3 h-3" aria-hidden="true" style="color: hsl(var(--foreground));"><path d="M20 6 9 17l-5-5"></path></svg></span><span class="text-sm text-secondary-foreground leading-relaxed">Phone versions</span></li><li class="flex items-start gap-3"><span class="mt-0.5 w-5 h-5 rounded-full bg-foreground/10 ring-1 ring-foreground/25 flex items-center justify-center shrink-0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="w-3 h-3" aria-hidden="true" style="color: hsl(var(--foreground));"><path d="M20 6 9 17l-5-5"></path></svg></span><span class="text-sm text-secondary-foreground leading-relaxed">Mac, Windows, iPhone, and Android</span></li><li class="flex items-start gap-3"><span class="mt-0.5 w-5 h-5 rounded-full bg-foreground/10 ring-1 ring-foreground/25 flex items-center justify-center shrink-0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="w-3 h-3" aria-hidden="true" style="color: hsl(var(--foreground));"><path d="M20 6 9 17l-5-5"></path></svg></span><span class="text-sm text-secondary-foreground leading-relaxed">Instant download</span></li><li class="flex items-start gap-3"><span class="mt-0.5 w-5 h-5 rounded-full bg-foreground/10 ring-1 ring-foreground/25 flex items-center justify-center shrink-0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="w-3 h-3" aria-hidden="true" style="color: hsl(var(--foreground));"><path d="M20 6 9 17l-5-5"></path></svg></span><span class="text-sm text-secondary-foreground leading-relaxed">Lifetime access</span></li><li class="flex items-start gap-3"><span class="mt-0.5 w-5 h-5 rounded-full bg-foreground/10 ring-1 ring-foreground/25 flex items-center justify-center shrink-0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="w-3 h-3" aria-hidden="true" style="color: hsl(var(--foreground));"><path d="M20 6 9 17l-5-5"></path></svg></span><span class="text-sm text-secondary-foreground leading-relaxed">7-day money-back guarantee</span></li></ul>
       <div class="flex-1"></div>
@@ -725,7 +744,7 @@ window.VESPRO_CONFIG = {
           </div>
           <div class="text-center md:border-l md:border-foreground/10 md:pl-10 flex flex-col items-center justify-center">
             <p class="text-muted-foreground text-sm uppercase tracking-[2px] mb-3">ONE-TIME PAYMENT</p>
-            <p class="text-6xl font-medium tracking-[-2px]">$9.90</p>
+            <p class="text-6xl font-medium tracking-[-2px]">$9.90<span class="cur-approx is-block" data-approx="9.90" hidden></span></p>
             <p class="text-muted-foreground text-sm mt-3">That's less than $0.09 per wallpaper.</p>
             <a href="#CHECKOUT-COMPLETA" data-checkout="completa" data-value="9.90" data-name="Complete Collection" class="block w-full rounded-xl px-8 py-4 text-sm font-bold tracking-wide mt-8 transition-transform duration-200 hover:scale-[1.02] active:scale-[0.98]" style="background: rgb(217, 184, 120); color: hsl(var(--background));">GET THE COMPLETE COLLECTION</a>
             <p class="text-xs text-muted-foreground mt-4">Secure checkout · Instant access</p>
@@ -748,7 +767,7 @@ window.VESPRO_CONFIG = {
     <h3 class="text-2xl md:text-3xl font-medium tracking-[-0.5px] mb-3 pr-6">For just $1 more, you can get the <span class="font-serif italic font-normal">Complete Collection</span>.</h3>
     <p class="text-sm text-secondary-foreground leading-relaxed mb-5">Along with the 60+ artworks, you get:</p>
     <ul class="space-y-2.5 mb-5"><li class="flex items-start gap-3"><span class="mt-0.5 w-5 h-5 rounded-full flex items-center justify-center shrink-0" style="background: rgba(217, 184, 120, 0.1); box-shadow: rgba(217, 184, 120, 0.4) 0px 0px 0px 1px inset;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="w-3 h-3" aria-hidden="true" style="color: rgb(217, 184, 120);"><path d="M20 6 9 17l-5-5"></path></svg></span><span class="text-sm text-secondary-foreground leading-relaxed">120+ wallpapers in total</span></li><li class="flex items-start gap-3"><span class="mt-0.5 w-5 h-5 rounded-full flex items-center justify-center shrink-0" style="background: rgba(217, 184, 120, 0.1); box-shadow: rgba(217, 184, 120, 0.4) 0px 0px 0px 1px inset;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="w-3 h-3" aria-hidden="true" style="color: rgb(217, 184, 120);"><path d="M20 6 9 17l-5-5"></path></svg></span><span class="text-sm text-secondary-foreground leading-relaxed">Extra versions of the paintings</span></li><li class="flex items-start gap-3"><span class="mt-0.5 w-5 h-5 rounded-full flex items-center justify-center shrink-0" style="background: rgba(217, 184, 120, 0.1); box-shadow: rgba(217, 184, 120, 0.4) 0px 0px 0px 1px inset;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="w-3 h-3" aria-hidden="true" style="color: rgb(217, 184, 120);"><path d="M20 6 9 17l-5-5"></path></svg></span><span class="text-sm text-secondary-foreground leading-relaxed">Ultrawide</span></li><li class="flex items-start gap-3"><span class="mt-0.5 w-5 h-5 rounded-full flex items-center justify-center shrink-0" style="background: rgba(217, 184, 120, 0.1); box-shadow: rgba(217, 184, 120, 0.4) 0px 0px 0px 1px inset;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="w-3 h-3" aria-hidden="true" style="color: rgb(217, 184, 120);"><path d="M20 6 9 17l-5-5"></path></svg></span><span class="text-sm text-secondary-foreground leading-relaxed">iPad</span></li><li class="flex items-start gap-3"><span class="mt-0.5 w-5 h-5 rounded-full flex items-center justify-center shrink-0" style="background: rgba(217, 184, 120, 0.1); box-shadow: rgba(217, 184, 120, 0.4) 0px 0px 0px 1px inset;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="w-3 h-3" aria-hidden="true" style="color: rgb(217, 184, 120);"><path d="M20 6 9 17l-5-5"></path></svg></span><span class="text-sm text-secondary-foreground leading-relaxed">Lock screens</span></li><li class="flex items-start gap-3"><span class="mt-0.5 w-5 h-5 rounded-full flex items-center justify-center shrink-0" style="background: rgba(217, 184, 120, 0.1); box-shadow: rgba(217, 184, 120, 0.4) 0px 0px 0px 1px inset;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="w-3 h-3" aria-hidden="true" style="color: rgb(217, 184, 120);"><path d="M20 6 9 17l-5-5"></path></svg></span><span class="text-sm text-secondary-foreground leading-relaxed">Guide to automatically changing your wallpaper</span></li><li class="flex items-start gap-3"><span class="mt-0.5 w-5 h-5 rounded-full flex items-center justify-center shrink-0" style="background: rgba(217, 184, 120, 0.1); box-shadow: rgba(217, 184, 120, 0.4) 0px 0px 0px 1px inset;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="w-3 h-3" aria-hidden="true" style="color: rgb(217, 184, 120);"><path d="M20 6 9 17l-5-5"></path></svg></span><span class="text-sm text-secondary-foreground leading-relaxed">Weekly updates</span></li></ul>
-    <div class="rounded-2xl px-4 py-3 mb-6 text-center" style="background: #d9b87812;"><p class="text-sm text-muted-foreground"><span class="line-through">$9.90</span></p><p class="font-semibold text-foreground text-base">Today, $7.90</p><p class="text-xs text-muted-foreground mt-1">Just $1 more than the collection you chose.</p></div>
+    <div class="rounded-2xl px-4 py-3 mb-6 text-center" style="background: #d9b87812;"><p class="text-sm text-muted-foreground"><span class="line-through">$9.90</span></p><p class="font-semibold text-foreground text-base">Today, $7.90<span class="cur-approx" data-approx="7.90" hidden></span></p><p class="text-xs text-muted-foreground mt-1">Just $1 more than the collection you chose.</p></div>
     <a href="#CHECKOUT-COMPLETA-UPSELL" data-checkout="completaUpsell" data-value="7.90" data-name="Complete Collection (upgrade)" class="block w-full text-center rounded-xl px-6 py-4 text-sm font-bold tracking-wide transition-transform duration-200 hover:scale-[1.02] active:scale-[0.98]" style="background: rgb(217, 184, 120); color: hsl(var(--background));">YES, I WANT THE COMPLETE COLLECTION</a>
     <a href="#CHECKOUT-ESSENCIAL" data-checkout="essencial" data-value="6.90" data-name="Essential Collection" class="block w-full text-center text-sm text-muted-foreground hover:text-foreground mt-4 transition-colors">No thanks, I'll stick with Essential</a>
   </div>
@@ -851,6 +870,36 @@ window.VESPRO_CONFIG = {
   var render=function(){var show=past&&!inOffer;bar.classList.toggle('translate-y-0',show);bar.classList.toggle('opacity-100',show);bar.classList.toggle('translate-y-full',!show);bar.classList.toggle('opacity-0',!show);bar.setAttribute('aria-hidden',!show);};
   new IntersectionObserver(function(es){inOffer=es[0].isIntersecting;render();},{threshold:0}).observe(of);
   var sc=function(){past=window.scrollY>window.innerHeight*.7;render();};window.addEventListener('scroll',sc,{passive:true});sc();
+
+  // Moeda: os preços continuam em USD; ao lado dos principais aparece "≈ valor na moeda local".
+  // Prioridade do país: marcação ?c=gb no link do anúncio > escolha manual do visitante > IP (via /api/geo).
+  // O checkout continua o mesmo; os valores enviados ao pixel continuam em USD.
+  var CUR_KEY='vespro_currency', picker=document.getElementById('currency-picker'), sel=document.getElementById('currency-select'), note=document.getElementById('currency-note');
+  var CUR_NAMES={USD:'US Dollar',EUR:'Euro',GBP:'British Pound',CAD:'Canadian Dollar',AUD:'Australian Dollar',NZD:'New Zealand Dollar',CHF:'Swiss Franc',SEK:'Swedish Krona',NOK:'Norwegian Krone',DKK:'Danish Krone',PLN:'Polish Zloty',CZK:'Czech Koruna',HUF:'Hungarian Forint',RON:'Romanian Leu',TRY:'Turkish Lira',BRL:'Brazilian Real',MXN:'Mexican Peso',COP:'Colombian Peso',CLP:'Chilean Peso',PEN:'Peruvian Sol',INR:'Indian Rupee',JPY:'Japanese Yen',KRW:'South Korean Won',SGD:'Singapore Dollar',HKD:'Hong Kong Dollar',PHP:'Philippine Peso',MYR:'Malaysian Ringgit',THB:'Thai Baht',IDR:'Indonesian Rupiah',AED:'UAE Dirham',SAR:'Saudi Riyal',ILS:'Israeli Shekel',ZAR:'South African Rand'};
+  var applyCurrency=function(code,rate){
+    var fmt; try{ fmt=new Intl.NumberFormat('en-US',{style:'currency',currency:code}); }catch(e){ return; }
+    var local=code!=='USD';
+    document.querySelectorAll('[data-approx]').forEach(function(el){
+      var v=fmt.format(parseFloat(el.dataset.approx)*rate);
+      el.textContent=el.classList.contains('is-block')?'≈ '+v:' (≈ '+v+')';
+      el.hidden=!local;
+    });
+    note.hidden=!local;
+    note.querySelector('[data-cur-code]').textContent=code;
+    sel.value=code;
+  };
+  var adCountry=''; try{ adCountry=(new URLSearchParams(location.search).get('c')||'').trim(); }catch(e){}
+  fetch('/api/geo'+(/^[a-z]{2}$/i.test(adCountry)?'?c='+adCountry.toLowerCase():'')).then(function(r){ return r.ok?r.json():Promise.reject(); }).then(function(d){
+    var rates=d&&d.rates||{}, codes=Object.keys(rates).filter(function(c){ return CUR_NAMES[c]; });
+    if(codes.length<2) return;
+    codes.sort(function(a,b){ return a==='USD'?-1:b==='USD'?1:a.localeCompare(b); });
+    codes.forEach(function(c){ var o=document.createElement('option'); o.value=c; o.textContent=c+' · '+CUR_NAMES[c]; sel.appendChild(o); });
+    var saved=null; try{ saved=localStorage.getItem(CUR_KEY); }catch(e){}
+    var code=(d.source==='link'&&rates[d.currency])?d.currency:(saved&&rates[saved])?saved:(rates[d.currency]?d.currency:'USD');
+    applyCurrency(code,rates[code]);
+    picker.hidden=false;
+    sel.addEventListener('change',function(){ applyCurrency(sel.value,rates[sel.value]); try{ localStorage.setItem(CUR_KEY,sel.value); }catch(e){} });
+  }).catch(function(){});
 
   // Checkout: aplica os links da configuração, repassa UTMs e dispara InitiateCheckout
   var KEY='vespro_utms', TTL=7*24*60*60*1000, PASS=/^(utm_|fbclid$|src$|sck$|xcod$|gclid$|ttclid$)/;
