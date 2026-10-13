@@ -10,3 +10,9 @@ desktop.ini
 
 # notas internas de tradução (não vão para o site)
 assets/depoimentos/localization-notes.md
+
+# ebook (entregável da Hotmart): contém os links do Drive, não pode ir para o site
+ebook/
+
+# resposta de teste do /api/geo para o servidor local (na Vercel quem responde é api/geo.js)
+api/geo
